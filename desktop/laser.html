@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; background: rgba(0, 0, 0, 0.01); }
+    #laser {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, rgba(255,0,0,1) 0%, rgba(255,0,0,0.4) 60%, rgba(255,0,0,0) 100%);
+      border-radius: 50%;
+      pointer-events: none;
+      display: none;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px rgba(255,0,0,0.8);
+    }
+  </style>
+</head>
+<body>
+  <div id="laser"></div>
+  <script>
+    const { ipcRenderer } = require('electron');
+    const laser = document.getElementById('laser');
+    
+    ipcRenderer.on('laser:move', (event, { x, y, visible }) => {
+      if (!visible) {
+        laser.style.display = 'none';
+        return;
+      }
+      laser.style.display = 'block';
+      laser.style.left = x + 'px';
+      laser.style.top = y + 'px';
+    });
+  </script>
+</body>
+</html>

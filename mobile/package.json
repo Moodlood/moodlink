@@ -1,0 +1,44 @@
+{
+  "name": "moodlink-mobile",
+  "version": "1.0.0",
+  "main": "expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios"
+  },
+  "dependencies": {
+    "@config-plugins/react-native-webrtc": "^15.0.1",
+    "@expo/vector-icons": "^15.0.3",
+    "@notifee/react-native": "^9.1.8",
+    "@react-navigation/bottom-tabs": "^7.18.13",
+    "@react-navigation/native": "^7.3.13",
+    "expo": "~57.0.8",
+    "expo-build-properties": "~57.0.7",
+    "expo-camera": "~57.0.3",
+    "expo-clipboard": "^57.0.1",
+    "expo-document-picker": "*",
+    "expo-file-system": "*",
+    "expo-font": "^57.0.1",
+    "expo-keep-awake": "^57.0.1",
+    "expo-sensors": "^57.0.2",
+    "expo-splash-screen": "^57.0.5",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.0",
+    "react-native-bluetooth-classic": "^1.73.0-rc.17",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-webrtc": "^124.0.8",
+    "socket.io-client": "^4.8.3"
+  },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "react-native-webrtc"
+        ]
+      }
+    }
+  }
+}

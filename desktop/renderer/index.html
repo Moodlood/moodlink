@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoodLink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Custom Titlebar -->
+  <div id="titlebar">
+    <div class="titlebar-drag">
+      <div class="titlebar-logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="8" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            <circle cx="16" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M11 12H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 12H2M22 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+            <path d="M8 9V4M16 9V4M8 15V20M16 15V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+          </svg>
+        </div>
+        <span class="titlebar-title">MoodLink</span>
+      </div>
+    </div>
+    <div class="titlebar-controls">
+      <button id="btn-minimize" class="titlebar-btn" onclick="moodlink.minimize()">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect y="5" width="12" height="1.5" fill="currentColor"/></svg>
+      </button>
+      <button id="btn-maximize" class="titlebar-btn" onclick="moodlink.maximize()">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </button>
+      <button id="btn-close" class="titlebar-btn btn-close" onclick="moodlink.close()">
+        <svg width="12" height="12" viewBox="0 0 12 12"><path d="M1 1L11 11M11 1L1 11" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div id="app-container">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="nav-section">
+        <button class="nav-item active" data-tab="dashboard" id="nav-dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="pairing" id="nav-pairing">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 7h3a5 5 0 0 1 0 10h-3m-6 0H6A5 5 0 0 1 6 7h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span>Connect</span>
+        </button>
+        <button class="nav-item" data-tab="files" id="nav-files">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span>Files</span>
+        </button>
+        <button class="nav-item" data-tab="clipboard" id="nav-clipboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+          <span>Clipboard</span>
+        </button>
+        <button class="nav-item" data-tab="system" id="nav-system">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>System</span>
+        </button>
+        <button class="nav-item" data-tab="mirror" id="nav-mirror">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Mirror</span>
+        </button>
+      </div>
+
+      <!-- Connection Status -->
+      <div class="sidebar-footer">
+        <div id="connection-status" class="conn-status disconnected">
+          <div class="conn-dot"></div>
+          <span class="conn-text">No device</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content Area -->
+    <main id="content">
+      <!-- Dashboard Tab -->
+      <div class="tab-panel active" id="tab-dashboard">
+        <div class="panel-header">
+          <h1>Dashboard</h1>
+          <p class="subtitle">Welcome to MoodLink</p>
+        </div>
+        <div class="dashboard-grid">
+          <!-- Hero Card -->
+          <div class="card hero-card" id="hero-card">
+            <div class="hero-content">
+              <div class="hero-icon-wrap">
+                <div class="hero-icon pulse">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 7h3a5 5 0 0 1 0 10h-3m-6 0H6A5 5 0 0 1 6 7h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                </div>
+              </div>
+              <h2 id="hero-title">Connect Your Device</h2>
+              <p id="hero-subtitle">Pair your Android phone to start controlling your PC remotely</p>
+              <button class="btn btn-primary" id="btn-start-pairing" onclick="switchTab('pairing')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 7h3a5 5 0 0 1 0 10h-3m-6 0H6A5 5 0 0 1 6 7h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Start Pairing
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Action Cards -->
+          <div class="card action-card" onclick="switchTab('files')">
+            <div class="action-icon files-icon">📁</div>
+            <h3>File Transfer</h3>
+            <p>Send & receive files</p>
+          </div>
+          <div class="card action-card" onclick="switchTab('clipboard')">
+            <div class="action-icon clip-icon">📋</div>
+            <h3>Clipboard</h3>
+            <p>Sync clipboard</p>
+          </div>
+          <div class="card action-card" onclick="switchTab('system')">
+            <div class="action-icon sys-icon">⚙️</div>
+            <h3>System Control</h3>
+            <p>Manage your PC</p>
+          </div>
+
+          <!-- Activity Log -->
+          <div class="card activity-card">
+            <h3>Recent Activity</h3>
+            <div id="activity-log" class="activity-list">
+              <div class="activity-empty">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <p>No activity yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pairing Tab -->
+      <div class="tab-panel" id="tab-pairing">
+        <div class="panel-header">
+          <h1>Connect Device</h1>
+          <p class="subtitle">Pair your phone via WiFi or Bluetooth</p>
+        </div>
+        <div class="pairing-container">
+          <div class="card pairing-card">
+            <div class="pairing-methods">
+              <button class="method-btn active" data-method="wifi" id="method-wifi">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                WiFi
+              </button>
+              <button class="method-btn" data-method="bluetooth" id="method-bluetooth">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/></svg>
+                Bluetooth
+              </button>
+            </div>
+
+            <!-- WiFi Pairing -->
+            <div id="pairing-wifi" class="pairing-method-content">
+              <div class="qr-section">
+                <div id="qr-code" class="qr-placeholder">
+                  <div class="qr-loading">Generating...</div>
+                </div>
+                <p class="qr-hint">Scan with MoodLink app on your phone</p>
+              </div>
+              <div class="divider"><span>OR</span></div>
+              <div class="code-section">
+                <p class="code-label">Enter this code on your phone</p>
+                <div id="pairing-code" class="pairing-code">
+                  <span class="code-digit">-</span>
+                  <span class="code-digit">-</span>
+                  <span class="code-digit">-</span>
+                  <span class="code-digit">-</span>
+                  <span class="code-digit">-</span>
+                  <span class="code-digit">-</span>
+                </div>
+                <div class="connection-info">
+                  <div class="info-row">
+                    <span class="info-label">IP Address</span>
+                    <span class="info-value" id="server-ip">Loading...</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="info-label">Port</span>
+                    <span class="info-value" id="server-port">Loading...</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-secondary" id="btn-refresh-code" onclick="refreshPairingCode()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Refresh Code
+              </button>
+            </div>
+
+            <!-- Bluetooth Pairing -->
+            <div id="pairing-bluetooth" class="pairing-method-content" style="display:none;">
+              <div class="bt-scan-section">
+                <button class="btn btn-primary" id="btn-bt-scan" onclick="scanBluetooth()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/></svg>
+                  Scan for Devices
+                </button>
+                <div id="bt-devices" class="bt-device-list">
+                  <div class="activity-empty">
+                    <p>Click scan to find nearby devices</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Files Tab -->
+      <div class="tab-panel" id="tab-files">
+        <div class="panel-header">
+          <h1>File Transfer</h1>
+          <p class="subtitle">Send and receive files between devices</p>
+        </div>
+        <div class="files-container">
+          <div class="card drop-zone" id="drop-zone">
+            <div class="drop-content">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <h3>Drop files here</h3>
+              <p>or click to browse</p>
+              <input type="file" id="file-input" multiple style="display:none">
+            </div>
+            <div class="drop-active">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <h3>Release to upload</h3>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Transferred Files</h3>
+            <div id="file-list" class="file-list">
+              <div class="activity-empty">
+                <p>No files transferred yet</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clipboard Tab -->
+      <div class="tab-panel" id="tab-clipboard">
+        <div class="panel-header">
+          <h1>Clipboard Sync</h1>
+          <p class="subtitle">Share clipboard between devices</p>
+        </div>
+        <div class="clipboard-container">
+          <div class="card">
+            <div class="clip-input-section">
+              <textarea id="clip-text" class="clip-textarea" placeholder="Type or paste text to send to your phone..."></textarea>
+              <button class="btn btn-primary" id="btn-send-clip" onclick="sendClipboard()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send to Phone
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Clipboard History</h3>
+            <div id="clip-history" class="clip-history-list">
+              <div class="activity-empty"><p>No clipboard history</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Tab -->
+      <div class="tab-panel" id="tab-system">
+        <div class="panel-header">
+          <h1>System Control</h1>
+          <p class="subtitle">Monitor and control your PC</p>
+        </div>
+        <div class="system-grid">
+          <!-- System Gauges -->
+          <div class="card gauge-card">
+            <h3>CPU</h3>
+            <div class="gauge" id="cpu-gauge">
+              <svg viewBox="0 0 120 120" class="gauge-svg">
+                <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                <circle cx="60" cy="60" r="50" class="gauge-fill" id="cpu-fill" style="--percent:0"/>
+              </svg>
+              <div class="gauge-value" id="cpu-value">0%</div>
+            </div>
+          </div>
+          <div class="card gauge-card">
+            <h3>Memory</h3>
+            <div class="gauge" id="mem-gauge">
+              <svg viewBox="0 0 120 120" class="gauge-svg">
+                <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                <circle cx="60" cy="60" r="50" class="gauge-fill" id="mem-fill" style="--percent:0"/>
+              </svg>
+              <div class="gauge-value" id="mem-value">0%</div>
+            </div>
+          </div>
+          <div class="card gauge-card">
+            <h3>Battery</h3>
+            <div class="gauge" id="bat-gauge">
+              <svg viewBox="0 0 120 120" class="gauge-svg">
+                <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                <circle cx="60" cy="60" r="50" class="gauge-fill gauge-fill-green" id="bat-fill" style="--percent:0"/>
+              </svg>
+              <div class="gauge-value" id="bat-value">N/A</div>
+            </div>
+          </div>
+
+          <!-- Volume Control -->
+          <div class="card volume-card">
+            <h3>Volume</h3>
+            <div class="volume-control">
+              <button class="icon-btn" id="btn-mute" onclick="toggleMute()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+              </button>
+              <input type="range" id="volume-slider" class="slider" min="0" max="100" value="50" oninput="setVolume(this.value)">
+              <span id="volume-value" class="slider-value">50%</span>
+            </div>
+          </div>
+
+          <!-- Media Controls -->
+          <div class="card media-card">
+            <h3>Media</h3>
+            <div class="media-controls">
+              <button class="media-btn" onclick="mediaControl('prev')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
+              <button class="media-btn media-btn-play" onclick="mediaControl('play')">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </button>
+              <button class="media-btn" onclick="mediaControl('next')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Power Controls -->
+          <div class="card power-card">
+            <h3>Power</h3>
+            <div class="power-grid">
+              <button class="power-btn" onclick="systemCommand('lock')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Lock</span>
+              </button>
+              <button class="power-btn" onclick="systemCommand('sleep')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <span>Sleep</span>
+              </button>
+              <button class="power-btn power-btn-warn" onclick="systemCommand('restart')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                <span>Restart</span>
+              </button>
+              <button class="power-btn power-btn-danger" onclick="systemCommand('shutdown')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                <span>Shutdown</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Phone Controls -->
+          <div class="card phone-control-card">
+            <h3>Remote Phone Control</h3>
+            <div class="power-grid">
+              <button class="power-btn" onclick="phoneCommand('alarm')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22h20M12 2v20M5 12h14"/></svg>
+                <span>Find Phone</span>
+              </button>
+              <button class="power-btn" onclick="phoneCommand('stop_alarm')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                <span>Stop Alarm</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Running Apps -->
+          <div class="card apps-card">
+            <div class="card-header-row">
+              <h3>Running Apps</h3>
+              <button class="btn btn-sm" onclick="refreshApps()">Refresh</button>
+            </div>
+            <div id="apps-list" class="apps-list">
+              <div class="activity-empty"><p>Loading...</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mirror & Audio Tab -->
+      <div class="tab-panel" id="tab-mirror">
+        <div class="panel-header">
+          <h1>Mirror & Audio</h1>
+          <p class="subtitle">Two-way screen mirroring and ambient voice</p>
+        </div>
+        <div class="system-grid">
+          <div class="card" style="grid-column: span 2">
+            <h3>Remote Device Screen/Camera</h3>
+            <div style="background:#0a0a0f; border-radius:8px; overflow:hidden; display:flex; justify-content:center; align-items:center; aspect-ratio:16/9; position:relative;">
+              <video id="remote-video" autoplay playsinline style="width:100%; height:100%; object-fit:contain;"></video>
+              <div id="video-overlay" style="position:absolute; color:#94a3b8; font-size:14px;">Waiting for stream...</div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Stream Controls</h3>
+            <div class="power-grid" style="grid-template-columns: 1fr;">
+              <button class="btn btn-primary" id="btn-start-mirror" onclick="toggleScreenMirror()">
+                <span>Stream PC Screen to Phone</span>
+              </button>
+              <button class="btn btn-secondary" id="btn-start-webcam" onclick="toggleWebcamMirror()">
+                <span>Stream PC Webcam to Phone</span>
+              </button>
+              <button class="btn btn-primary" id="btn-start-audio" onclick="toggleIntercom()">
+                <span>Enable Two-Way Audio</span>
+              </button>
+            </div>
+            <p style="font-size:12px; color:#94a3b8; margin-top:16px;">
+              * The phone can also stream its camera to the PC video player above. Control the phone from the app's Mirror screen!
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container"></div>
+
+  <!-- Confirm Modal -->
+  <div id="confirm-modal" class="modal" style="display:none">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-icon">⚠️</div>
+      <h3 id="confirm-title">Are you sure?</h3>
+      <p id="confirm-text">This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirm-btn" onclick="confirmAction()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="http://localhost:3847/socket.io/socket.io.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

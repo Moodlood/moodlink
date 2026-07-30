@@ -1,0 +1,46 @@
+{
+  "name": "moodlink",
+  "version": "1.0.0",
+  "description": "MoodLink — Full remote control hub between PC and Android",
+  "main": "desktop/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder --win",
+    "pack": "electron-builder --dir"
+  },
+  "author": "MoodLink",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.0",
+    "koffi": "^2.9.0",
+    "multer": "^1.4.5-lts.1",
+    "node-forge": "^1.4.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.7.5",
+    "systeminformation": "^5.23.5",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "electron": "^32.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.moodlink.app",
+    "productName": "MoodLink",
+    "win": {
+      "target": "nsis",
+      "icon": "desktop/assets/icon.png"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "desktop/**/*",
+      "shared/**/*",
+      "protocol/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ]
+  }
+}
