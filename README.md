@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="desktop/assets/icon.png" width="120" alt="MoodLink Logo"><br>
+  <img src="desktop/assets/Gemini_Generated_Image_tdi7d0tdi7d0tdi7.png" width="120" alt="MoodLink Logo"><br>
   MoodLink
 </h1>
 
