@@ -16,11 +16,11 @@
 
 ---
 
-## 🎯 Why I Built It
+## Why I Built It
 
 MoodLink was built to provide a fast, low-latency remote control solution between Android devices and Windows PCs over a local network, focusing on raw performance, modularity, and bypassing aggressive mobile background restrictions. It aims to eliminate the friction of existing remote apps by providing true two-way communication without relying on third-party cloud servers.
 
-## ✨ Features
+## Features
 
 - **Remote Trackpad:** Transform your Android touchscreen into a highly responsive laptop-style trackpad with two-finger scrolling.
 - **Screen Mirroring:** Low-latency, Peer-to-Peer WebRTC desktop streaming directly to your phone.
@@ -30,7 +30,7 @@ MoodLink was built to provide a fast, low-latency remote control solution betwee
 - **Bi-directional Clipboard:** Seamlessly sync text between your PC and phone.
 - **File Transfer:** Wirelessly blast files from your phone directly to the PC's Downloads folder.
 
-## 🏗️ Architecture
+## Architecture
 
 MoodLink utilizes a modular monorepo structure. A local Node/Express server acts as the central hub, utilizing WebSockets for real-time telemetry and commands, and WebRTC for low-latency media streams.
 
@@ -55,14 +55,14 @@ graph TD
     A -->|HTTP POST<br/>File Transfers| B
 ```
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Android:** React Native, Expo, Java/Kotlin (Native Modules), Notifee (Foreground Services)
 - **Windows / Server:** Electron, Node.js, Express, Socket.io
 - **Media & Networking:** WebRTC, TCP/UDP Sockets, HTTP Networking
 - **System Integration:** Windows PowerShell, RobotJS (Input processing)
 
-## 📸 Screenshots
+## Screenshots
 
 *(Mockup previews of the MoodLink UI. Replace with real application screenshots soon!)*
 
@@ -70,7 +70,7 @@ graph TD
 | :---: | :---: |
 | ![Android Mockup](docs/mockups/android_remote_mockup.png) | ![Desktop Mockup](docs/mockups/desktop_dashboard_mockup.png) |
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
@@ -105,12 +105,12 @@ npm start
 ### 3. Pairing
 Make sure both devices are on the **same Wi-Fi network**. Open the mobile app, tap **Connect**, and scan the QR code displayed on the PC.
 
-## 🛣️ Roadmap
+## Roadmap
 
 - [ ] iOS Support (via React Native)
 - [ ] Bluetooth LE Fallback (for networks that block WebSockets)
 - [ ] Custom Macro Keyboard layouts
 - [ ] Wake-on-LAN functionality
 
-## 📄 License
+## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
