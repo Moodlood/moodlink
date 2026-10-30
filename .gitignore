@@ -11,6 +11,8 @@ dist/
 *.mobileprovision
 *.orig.*
 web-build/
+*.apk
+moodlink.apk
 
 # OS specific
 .DS_Store
