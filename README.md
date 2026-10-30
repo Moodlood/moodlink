@@ -285,6 +285,12 @@ npm run build
 
 ### Running the Mobile App
 
+#### Option A: Pre-Built Android Package (Recommended)
+Download and extract the ready-to-install Android release package directly from the repository:
+- Extract `moodlink-apk.zip` to obtain `moodlink.apk`.
+- Sideload and install directly on any Android 7.0+ device.
+
+#### Option B: Run from Source with Expo
 ```bash
 # Navigate to mobile directory
 cd mobile
