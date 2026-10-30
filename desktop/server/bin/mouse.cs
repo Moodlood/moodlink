@@ -31,12 +31,14 @@ public class Mouse {
             string command = parts[0];
 
             if (command == "move" && parts.Length >= 3) {
-                if (int.TryParse(parts[1], out int x) && int.TryParse(parts[2], out int y)) {
+                int x, y;
+                if (int.TryParse(parts[1], out x) && int.TryParse(parts[2], out y)) {
                     SetCursorPos(x, y);
                 }
             }
             else if (command == "move_rel" && parts.Length >= 3) {
-                if (int.TryParse(parts[1], out int dx) && int.TryParse(parts[2], out int dy)) {
+                int dx, dy;
+                if (int.TryParse(parts[1], out dx) && int.TryParse(parts[2], out dy)) {
                     mouse_event(MOUSEEVENTF_MOVE, (uint)dx, (uint)dy, 0, UIntPtr.Zero);
                 }
             } 
@@ -51,13 +53,15 @@ public class Mouse {
                 }
             }
             else if (command == "scroll" && parts.Length >= 3) {
-                if (int.TryParse(parts[1], out int dx) && int.TryParse(parts[2], out int dy)) {
+                int dx, dy;
+                if (int.TryParse(parts[1], out dx) && int.TryParse(parts[2], out dy)) {
                     if (dy != 0) mouse_event(MOUSEEVENTF_WHEEL, 0, 0, dy * 120, UIntPtr.Zero);
                     if (dx != 0) mouse_event(MOUSEEVENTF_HWHEEL, 0, 0, dx * 120, UIntPtr.Zero);
                 }
             }
             else if (command == "key" && parts.Length >= 3) {
-                if (byte.TryParse(parts[1], out byte vk)) {
+                byte vk;
+                if (byte.TryParse(parts[1], out vk)) {
                     string action = parts[2]; // down, up, press
                     if (action == "down" || action == "press") keybd_event(vk, 0, 0, UIntPtr.Zero);
                     if (action == "up" || action == "press") keybd_event(vk, 0, 0x0002, UIntPtr.Zero);

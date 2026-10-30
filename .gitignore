@@ -28,3 +28,7 @@ yarn-error.log*
 .env.production.local
 build_log.txt
 config_error.txt
+
+# Runtime / Generated config files
+*.cfg
+SoundVolumeView.cfg

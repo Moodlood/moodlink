@@ -84,18 +84,11 @@ function createLaserWindow() {
 }
 
 // ─── System Tray ─────────────────────────────────────────────────────
-function createTray() {
-  // Create a simple 16x16 tray icon programmatically
-  const iconSize = 16;
-  const canvas = nativeImage.createEmpty();
-  
-  // Use a simple colored icon
-  const trayIcon = nativeImage.createFromBuffer(
-    createTrayIconBuffer(), { width: 16, height: 16 }
-  );
-
-  tray = new Tray(trayIcon);
-  tray.setToolTip('MoodLink — Connected');
+function updateTrayMenu(connected = false, deviceName = null) {
+  if (!tray) return;
+  const statusLabel = connected
+    ? `● Connected${deviceName ? ': ' + deviceName : ''}`
+    : '● No device connected';
 
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -109,9 +102,8 @@ function createTray() {
     },
     { type: 'separator' },
     {
-      label: 'Connection Status',
-      enabled: false,
-      label: '● No device connected'
+      label: statusLabel,
+      enabled: false
     },
     { type: 'separator' },
     {
@@ -124,35 +116,28 @@ function createTray() {
   ]);
 
   tray.setContextMenu(contextMenu);
+  tray.setToolTip(`MoodLink — ${connected ? 'Connected' : 'Ready'}`);
+}
+
+function createTray() {
+  const iconPath = path.join(__dirname, 'assets', 'icon.png');
+  let trayIcon;
+  try {
+    trayIcon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
+  } catch (err) {
+    console.error('Failed to load tray icon image, using fallback:', err);
+    trayIcon = nativeImage.createEmpty();
+  }
+
+  tray = new Tray(trayIcon);
+  updateTrayMenu(false);
+
   tray.on('double-click', () => {
     if (mainWindow) {
       mainWindow.show();
       mainWindow.focus();
     }
   });
-}
-
-// Create a simple tray icon buffer (16x16 RGBA)
-function createTrayIconBuffer() {
-  const size = 16;
-  const buf = Buffer.alloc(size * size * 4);
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      const idx = (y * size + x) * 4;
-      const cx = x - size / 2;
-      const cy = y - size / 2;
-      const dist = Math.sqrt(cx * cx + cy * cy);
-      if (dist < size / 2 - 1) {
-        buf[idx] = 99;      // R
-        buf[idx + 1] = 102; // G
-        buf[idx + 2] = 241; // B (indigo)
-        buf[idx + 3] = 255; // A
-      } else {
-        buf[idx + 3] = 0;   // transparent
-      }
-    }
-  }
-  return buf;
 }
 
 // ─── IPC Handlers ────────────────────────────────────────────────────
@@ -197,9 +182,10 @@ function setupIPC() {
     }));
   });
 
-  // Update tray tooltip
-  ipcMain.on('tray:updateStatus', (_, status) => {
-    if (tray) tray.setToolTip(`MoodLink — ${status}`);
+  // Update tray tooltip and context menu
+  ipcMain.on('tray:updateStatus', (_, status, deviceName) => {
+    const isConnected = (status === 'Connected' || status === 'connected');
+    updateTrayMenu(isConnected, deviceName);
   });
 }
 
@@ -218,11 +204,21 @@ app.whenReady().then(async () => {
   const primaryDisplay = screen.getPrimaryDisplay().bounds;
   systemControl.setScreenResolution(primaryDisplay.width, primaryDisplay.height);
 
+  serverEvents.on('device:connected', (dev) => {
+    updateTrayMenu(true, dev?.name);
+  });
+  serverEvents.on('device:disconnected', () => {
+    updateTrayMenu(false);
+  });
+
   serverEvents.on('laser', (data) => {
     if (!laserWindow) return;
     if (data.visible) {
       if (!laserWindow.isVisible()) laserWindow.showInactive();
-      laserWindow.webContents.send('laser:move', data);
+      const bounds = screen.getPrimaryDisplay().bounds;
+      const x = data.rx != null ? Math.round(data.rx * bounds.width) : (data.x || 0);
+      const y = data.ry != null ? Math.round(data.ry * bounds.height) : (data.y || 0);
+      laserWindow.webContents.send('laser:move', { x, y, visible: true });
     } else {
       laserWindow.hide();
     }

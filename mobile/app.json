@@ -11,7 +11,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0a0a0f",
+          "backgroundColor": "#000000",
           "image": "./assets/splash.png",
           "imageWidth": 200
         }
@@ -20,7 +20,8 @@
         "expo-build-properties",
         {
           "android": {
-            "usesCleartextTraffic": true
+            "usesCleartextTraffic": true,
+            "minSdkVersion": 24
           }
         }
       ],
@@ -36,7 +37,14 @@
           "cameraPermission": "Allow MoodLink to stream video for two-way mirroring.",
           "microphonePermission": "Allow MoodLink to capture ambient audio."
         }
-      ]
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow MoodLink to use biometric authentication for PC security."
+        }
+      ],
+      "expo-font"
     ],
     "assetBundlePatterns": [
       "**/*"
@@ -47,7 +55,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0a0a0f"
+        "backgroundColor": "#000000"
       },
       "package": "com.moodlink.app",
       "permissions": [
@@ -64,7 +72,9 @@
         "android.permission.POST_NOTIFICATIONS",
         "android.permission.SYSTEM_ALERT_WINDOW",
         "android.permission.FOREGROUND_SERVICE",
-        "android.permission.WAKE_LOCK"
+        "android.permission.WAKE_LOCK",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
       ]
     },
     "web": {

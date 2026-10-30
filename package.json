@@ -2,12 +2,27 @@
   "name": "moodlink",
   "version": "1.0.0",
   "description": "MoodLink — Full remote control hub between PC and Android",
-  "main": "desktop/main.js",
+  "main": "desktop/index.js",
+  "bin": "desktop/index.js",
   "scripts": {
-    "start": "electron .",
-    "dev": "electron . --dev",
-    "build": "electron-builder --win",
-    "pack": "electron-builder --dir"
+    "start": "node desktop/index.js",
+    "build": "desktop\\server\\bin\\build_ui.bat && pkg . --targets node18-win-x64 --output dist/moodlink.exe"
+  },
+  "pkg": {
+    "assets": [
+      "desktop/renderer/**/*",
+      "desktop/server/bin/ui.exe",
+      "desktop/server/bin/Microsoft.Web.WebView2.Core.dll",
+      "desktop/server/bin/Microsoft.Web.WebView2.WinForms.dll",
+      "desktop/server/bin/WebView2Loader.dll",
+      "desktop/server/bin/SoundVolumeView.exe",
+      "desktop/server/bin/mouse.cs",
+      "desktop/server/bin/bt-serial.cs",
+      "desktop/server/bin/icon.ico"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ]
   },
   "author": "MoodLink",
   "license": "MIT",
@@ -22,25 +37,6 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "electron": "^32.0.0",
-    "electron-builder": "^25.0.0"
-  },
-  "build": {
-    "appId": "com.moodlink.app",
-    "productName": "MoodLink",
-    "win": {
-      "target": "nsis",
-      "icon": "desktop/assets/icon.png"
-    },
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "desktop/**/*",
-      "shared/**/*",
-      "protocol/**/*",
-      "node_modules/**/*",
-      "package.json"
-    ]
+    "pkg": "^5.8.1"
   }
 }

@@ -9,3 +9,5 @@ dist/
 *.orig.*
 web-build/
 .env
+/android
+/ios

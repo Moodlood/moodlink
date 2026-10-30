@@ -17,26 +17,36 @@ class SystemControl {
   }
 
   _initWinAPI() {
-    const binDir = path.join(__dirname, 'bin');
+    const os = require('os');
+    const binDir = path.join(os.tmpdir(), 'moodlink_bin');
+    if (!fs.existsSync(binDir)) fs.mkdirSync(binDir, { recursive: true });
+
+    // Copy .cs files and SoundVolumeView.exe from snapshot to tmpdir
+    const snapshotBinDir = path.join(__dirname, 'bin');
+    const filesToCopy = ['mouse.cs', 'bt-serial.cs', 'SoundVolumeView.exe'];
+    for (const f of filesToCopy) {
+      if (fs.existsSync(path.join(snapshotBinDir, f))) {
+        fs.copyFileSync(path.join(snapshotBinDir, f), path.join(binDir, f));
+      }
+    }
+
     const csFile = path.join(binDir, 'mouse.cs');
     const exeFile = path.join(binDir, 'mouse.exe');
     
     const btCsFile = path.join(binDir, 'bt-serial.cs');
     const btExeFile = path.join(binDir, 'bt-serial.exe');
-    
-    if (!fs.existsSync(binDir)) fs.mkdirSync(binDir, { recursive: true });
 
     const cscPath = 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe';
 
     const startMouseProcess = () => {
-      this.mouseProcess = spawn(exeFile);
+      this.mouseProcess = spawn(exeFile, [], { windowsHide: true });
       this.mouseProcess.on('error', (err) => console.error('[MoodLink] Failed to start native mouse process:', err));
       console.log('[MoodLink] Native C# mouse controller active.');
     };
 
     if (!fs.existsSync(exeFile) && fs.existsSync(csFile)) {
       console.log('[MoodLink] Compiling C# native controller (mouse.exe)...');
-      exec(`powershell -Command "& '${cscPath}' /out:'${exeFile}' '${csFile}'"`, (err) => {
+      exec(`powershell -Command "& '${cscPath}' /target:winexe /out:'${exeFile}' '${csFile}'"`, { windowsHide: true }, (err) => {
         if (err) console.error('[MoodLink] Compile error:', err);
         else startMouseProcess();
       });
@@ -46,7 +56,7 @@ class SystemControl {
 
     if (!fs.existsSync(btExeFile) && fs.existsSync(btCsFile)) {
       console.log('[MoodLink] Compiling C# bluetooth bridge (bt-serial.exe)...');
-      exec(`powershell -Command "& '${cscPath}' /out:'${btExeFile}' '${btCsFile}'"`, (err) => {
+      exec(`powershell -Command "& '${cscPath}' /target:winexe /out:'${btExeFile}' '${btCsFile}'"`, { windowsHide: true }, (err) => {
         if (err) console.error('[MoodLink] BT compile error:', err);
       });
     }
@@ -177,6 +187,36 @@ class SystemControl {
   lock() { exec('rundll32.exe user32.dll,LockWorkStation'); }
   sleep() { exec('rundll32.exe powrprof.dll,SetSuspendState 0,1,0'); }
 
+  async launchApp(target) {
+    if (!target) return;
+    const apps = {
+      chrome: 'start chrome',
+      vscode: 'start code',
+      code: 'start code',
+      explorer: 'start explorer',
+      taskmgr: 'start taskmgr',
+      calc: 'start calc',
+      notepad: 'start notepad',
+      terminal: 'start wt || start powershell',
+      powershell: 'start powershell',
+      cmd: 'start cmd',
+      spotify: 'start spotify'
+    };
+    const key = typeof target === 'string' ? target.toLowerCase().trim() : '';
+    if (apps[key]) {
+      exec(apps[key], { windowsHide: true }, (err) => {
+        if (err) console.error(`Failed to launch app ${target}:`, err.message);
+      });
+    } else {
+      try {
+        const open = require('open');
+        await open(target);
+      } catch (err) {
+        exec(`start "" "${target}"`, { windowsHide: true }, () => {});
+      }
+    }
+  }
+
   // ─── System Info ────────────────────────────────────────────────
   async getSystemInfo() {
     try {
@@ -220,11 +260,6 @@ class SystemControl {
     });
   }
 
-  async launchApp(appPath) {
-    const open = require('open');
-    await open(appPath);
-  }
-
   async killApp(pid) {
     exec(`taskkill /PID ${pid} /F`);
   }
@@ -259,7 +294,8 @@ class SystemControl {
       this.btProcess.kill();
       this.btProcess = null;
     }
-    const exeFile = path.join(__dirname, 'bin', 'bt-serial.exe');
+    const os = require('os');
+    const exeFile = path.join(os.tmpdir(), 'moodlink_bin', 'bt-serial.exe');
     if (fs.existsSync(exeFile)) {
       this.btProcess = spawn(exeFile, [port]);
       this.btProcess.stdout.on('data', (d) => {

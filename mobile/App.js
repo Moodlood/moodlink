@@ -19,12 +19,12 @@ const Tab = createBottomTabNavigator();
 const theme = {
   dark: true,
   colors: {
-    primary: '#6366f1',
-    background: '#0a0a0f',
-    card: '#12121a',
-    text: '#f1f5f9',
-    border: 'rgba(255,255,255,0.06)',
-    notification: '#ef4444',
+    primary: '#facc15',
+    background: '#000000',
+    card: '#0d0d0d',
+    text: '#ffffff',
+    border: 'rgba(255,255,255,0.08)',
+    notification: '#22c55e',
   },
   fonts: Platform.select({
     ios: {
@@ -60,11 +60,11 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <View style={{ flex: 1, backgroundColor: '#0a0a0f', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-          <Text style={{ color: '#ef4444', fontSize: 20, fontWeight: 'bold', marginBottom: 12 }}>
-            MoodLink crashed
+        <View style={{ flex: 1, backgroundColor: '#000000', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+          <Text style={{ color: '#facc15', fontSize: 20, fontWeight: 'bold', marginBottom: 12 }}>
+            MoodLink Error
           </Text>
-          <Text style={{ color: '#94a3b8', fontSize: 14, textAlign: 'center' }}>
+          <Text style={{ color: '#ffffff', fontSize: 14, textAlign: 'center' }}>
             {this.state.error?.toString()}
           </Text>
         </View>
@@ -79,14 +79,14 @@ export default function App() {
     <ErrorBoundary>
       <SafeAreaProvider>
         <NavigationContainer theme={theme}>
-          <StatusBar style="light" backgroundColor="#0a0a0f" />
+          <StatusBar style="light" backgroundColor="#000000" />
           <Tab.Navigator
             screenOptions={({ route }) => ({
-              headerStyle: { backgroundColor: '#12121a', elevation: 0, shadowOpacity: 0, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)' },
-              headerTintColor: '#f1f5f9',
-              tabBarStyle: { backgroundColor: '#12121a', borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.06)' },
-              tabBarActiveTintColor: '#6366f1',
-              tabBarInactiveTintColor: '#64748b',
+              headerStyle: { backgroundColor: '#0d0d0d', elevation: 0, shadowOpacity: 0, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.08)' },
+              headerTintColor: '#ffffff',
+              tabBarStyle: { backgroundColor: '#0d0d0d', borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.08)' },
+              tabBarActiveTintColor: '#facc15',
+              tabBarInactiveTintColor: '#94a3b8',
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
                 if (route.name === 'Connect') iconName = focused ? 'link' : 'link-outline';
