@@ -202,19 +202,6 @@ Pairing between devices is fully automated and secured by cryptographic session 
   - **Desktop / Default:** Task Manager, File Explorer, Snipping Tool, Show Desktop, Browser, Code Editor, Music, Settings.
 - **Biometric Workstation Lock:** Unlock or lock your Windows PC securely using Android's native fingerprint reader or facial recognition via `expo-local-authentication`.
 
----
-
-## Strict Color Theme
-
-MoodLink strictly adheres to a high-contrast, distraction-free color palette:
-
-- **Black (`#000000`, `#0c0c0c`, `#111111`, `#161616`)**: Pure OLED surfaces, elevated cards, and dark containers.
-- **Yellow (`#facc15`)**: Primary action buttons, active navigation indicators, and QR code glyphs.
-- **Green (`#22c55e`)**: Live audio streams, equalizer indicators, transport status badges, battery status, and laser pointer.
-- **White (`#ffffff`, `#94a3b8`)**: Crisp typography, high-visibility icons, and subtle borders.
-
----
-
 ## Architecture
 
 ```mermaid
