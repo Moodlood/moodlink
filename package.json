@@ -24,7 +24,7 @@
       "node18-win-x64"
     ]
   },
-  "author": "MoodLink",
+  "author": "Moodlood",
   "license": "MIT",
   "dependencies": {
     "express": "^4.21.0",
